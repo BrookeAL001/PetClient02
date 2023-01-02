@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PetClient02.Data;
+using PetClient02.Models;
 
 namespace PetClient02.Controllers
 {
@@ -10,7 +12,7 @@ namespace PetClient02.Controllers
         private readonly ClientsApiDbContext dbContext;
         public ClientsController(ClientsApiDbContext dbContext)
         {
-
+            this.dbContext = dbContext; 
         }
         [HttpGet]
         public async Task<IActionResult> GetClients()
@@ -33,7 +35,7 @@ namespace PetClient02.Controllers
                 FullName = addClientRequest.FullName,
                 Species = addClientRequest.Species,
             };
-            
+
            await dbContext.Clients.AddAsync(client);
             await dbContext.SaveChangesAsync();
             return Ok(client);
