@@ -13,10 +13,30 @@ namespace PetClient02.Controllers
 
         }
         [HttpGet]
-        public IActionResult GetClients()
+        public async Task<IActionResult> GetClients()
         {
-           return Ok(dbContext.Clients.ToList());
+           return Ok(await dbContext.Clients.ToListAsync());
             
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddClient(AddClientRequest addClientRequest)
+        {
+            var client = new Client()
+            {
+                Id = Guid.NewGuid(),
+                Breed = addClientRequest.Breed,
+                Email = addClientRequest.Email,
+                PetBirthday = addClientRequest.PetBirthday,
+                PetName = addClientRequest.PetName,
+                Phone = addClientRequest.Phone,
+                FullName = addClientRequest.FullName,
+                Species = addClientRequest.Species,
+            };
+            
+           await dbContext.Clients.AddAsync(client);
+            await dbContext.SaveChangesAsync();
+            return Ok(client);
         }
     }
 }
